@@ -89,35 +89,44 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    # util.raiseNotDefined()
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    # util.raiseNotDefined()clear
     start = problem.getStartState()
     visited = []
     fringe = util.Stack()
     fringe.push((start, []))
     while not fringe.isEmpty():
         current, path = fringe.pop()
-        print(current)
-        print(path)
         if problem.isGoalState(current):
             return path
         visited.append(current)
         successors = problem.getSuccessors(current)
         for successor in successors:
-            if successor not in visited:
-                newPath = path.copy()
-                print(newPath)
-                fringe.push((successor[0], newPath.append(successor[1])))
-                print((successor[0], newPath.append(successor[1])))
-    # return None
+            if successor[0] not in visited:
+                # don't use append because it modifies the list in place and returns None
+                newPath = path + [successor[1]]
+                fringe.push((successor[0], newPath))
+    return None
 
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    start = problem.getStartState()
+    visited = []
+    fringe = util.Queue()
+    fringe.push((start, []))
+    while not fringe.isEmpty():
+        current, path = fringe.pop()
+        if problem.isGoalState(current):
+            return path
+        if current not in visited:
+            visited.append(current)
+            successors = problem.getSuccessors(current)
+            for successor in successors:
+                if successor[0] not in visited:
+                    newPath = path + [successor[1]]
+                    fringe.push((successor[0], newPath))
+    return None
 
 
 def uniformCostSearch(problem: SearchProblem):
