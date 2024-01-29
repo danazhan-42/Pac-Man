@@ -132,21 +132,24 @@ def breadthFirstSearch(problem: SearchProblem):
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    # print("Start:", problem.getStartState())
-    # print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     start = problem.getStartState()
-    visited = []
     fringe = util.PriorityQueue()
-    fringe.push((start, [], 0), 0)
+    # Duplicates of nodes with different path and cost will be stored if use (start, path, cost).
+    # It is not optimal because the same node with higher cost might be visited earlier
+    # if the a lower-cost path to that same node is found later.
+    fringe.push((start, []), 0)
+    visited = []
+    costSoFar = {}
+    costSoFar[start] = 0
     while not fringe.isEmpty():
-        current, path, cost = fringe.pop()
+        current, path = fringe.pop()
         if problem.isGoalState(current):
             return path
         if current not in visited:
             visited.append(current)
             successors = problem.getSuccessors(current)
             for successor in successors:
+
                 if successor[0] not in visited:
                     newPath = path + [successor[1]]
                     newCost = cost + successor[2]
