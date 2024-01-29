@@ -133,23 +133,20 @@ def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
     start = problem.getStartState()
-    fringe = util.PriorityQueue()
-    # Duplicates of nodes with different path and cost will be stored if use (start, path, cost).
-    # It is not optimal because the same node with higher cost might be visited earlier
-    # if the a lower-cost path to that same node is found later.
-    fringe.push((start, []), 0)
     visited = []
+    fringe = util.PriorityQueue()
+    # Duplicates of nodes with different path and cost will exist in the fringe
+    fringe.push((start, [], 0), 0)
     costSoFar = {}
     costSoFar[start] = 0
     while not fringe.isEmpty():
-        current, path = fringe.pop()
+        current, path, cost = fringe.pop()
         if problem.isGoalState(current):
             return path
         if current not in visited:
             visited.append(current)
             successors = problem.getSuccessors(current)
             for successor in successors:
-
                 if successor[0] not in visited:
                     newPath = path + [successor[1]]
                     newCost = cost + successor[2]
