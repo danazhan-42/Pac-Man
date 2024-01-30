@@ -398,7 +398,46 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     walls = problem.walls
 
     "*** YOUR CODE HERE ***"
-    return 0  # Default to trivial solution
+    pos, corners = state
+    if len(corners) == 0:
+        return 0
+    # straight line assumption expanded more than 1467 nodes
+    # straightLineDistances = []
+    # for corner in corners:
+    #     straightLineDistances.append(util.manhattanDistance(pos, corner))
+    # return min(straightLineDistances)
+
+    # Manhattan distance expanded around 1476 nodes
+    # manhattonDistances = []
+    # for corner in corners:
+    #     manhattonDistances.append(util.manhattanDistance(pos, corner))
+    # return min(manhattonDistances)
+
+    # Max Manhattan distance expanded 1137 nodes
+    distances = []
+    for corner in corners:
+        distances.append(util.manhattanDistance(pos, corner))
+    return max(distances)
+
+    # if len(corners) == 1:
+    #     return util.manhattanDistance(pos, corners[0])
+
+    # # finding the distance between each unvisited corner
+    # path = ((0, 0), (0, 0), 0)
+    # for corner1 in corners:
+    #     for corner2 in corners:
+    #         if corner1 != corner2:
+    #             distance = util.manhattanDistance(corner1, corner2)
+    #             # find two corners with the longest distance between them
+    #             if distance > path[2]:
+    #                 path = (corner1, corner2, distance)
+
+    # # find the shortest distance from current position to the two corners
+    # distance1 = util.manhattanDistance(pos, path[0])
+    # distance2 = util.manhattanDistance(pos, path[1])
+    # state_to_corner = min(distance1, distance2)
+    # # return the sum of the shortest distance and the longest distance between two corners
+    # return state_to_corner + path[2]
 
 
 class AStarCornersAgent(SearchAgent):
@@ -500,9 +539,27 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
-    position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+    # Max Manhattan distance expanded 9551 nodes
+    # position, foodGrid = state
+    # if len(foodGrid.asList()) == 0:
+    #     return 0
+    # distance = []
+    # for food in foodGrid.asList():
+    #     distance.append(util.manhattanDistance(position, food))
+    # return max(distance)
+
+    pos, foodGrid = state
+    if len(foodGrid.asList()) == 0:
+        return 0
+    distancesToFood = []
+    distancesBetweenFood = [0]
+    for food in foodGrid.asList():
+        distancesToFood.append(util.manhattanDistance(pos, food))
+        for toFood in foodGrid.asList():
+            distancesBetweenFood.append(
+                util.manhattanDistance(food, toFood))
+
+    return min(distancesToFood) + max(distancesBetweenFood)
 
 
 class ClosestDotSearchAgent(SearchAgent):
