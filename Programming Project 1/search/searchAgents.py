@@ -413,7 +413,8 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     #     manhattonDistances.append(util.manhattanDistance(pos, corner))
     # return min(manhattonDistances)
 
-    # Max Manhattan distance expanded 1137 nodes
+    # Max Manhattan distance expanded 1137 nodes.
+    # it is admissible and consistent.
     distances = []
     for corner in corners:
         distances.append(util.manhattanDistance(pos, corner))
@@ -540,26 +541,26 @@ def foodHeuristic(state: Tuple[Tuple, List[List]], problem: FoodSearchProblem):
     problem.heuristicInfo['wallCount']
     """
     # Max Manhattan distance expanded 9551 nodes
-    # position, foodGrid = state
-    # if len(foodGrid.asList()) == 0:
-    #     return 0
-    # distance = []
-    # for food in foodGrid.asList():
-    #     distance.append(util.manhattanDistance(position, food))
-    # return max(distance)
-
-    pos, foodGrid = state
+    position, foodGrid = state
     if len(foodGrid.asList()) == 0:
         return 0
-    distancesToFood = []
-    distancesBetweenFood = [0]
+    distance = []
     for food in foodGrid.asList():
-        distancesToFood.append(util.manhattanDistance(pos, food))
-        for toFood in foodGrid.asList():
-            distancesBetweenFood.append(
-                util.manhattanDistance(food, toFood))
+        distance.append(util.manhattanDistance(position, food))
+    return max(distance)
 
-    return min(distancesToFood) + max(distancesBetweenFood)
+    # pos, foodGrid = state
+    # if len(foodGrid.asList()) == 0:
+    #     return 0
+    # distancesToFood = []
+    # distancesBetweenFood = [0]
+    # for food in foodGrid.asList():
+    #     distancesToFood.append(util.manhattanDistance(pos, food))
+    #     for toFood in foodGrid.asList():
+    #         distancesBetweenFood.append(
+    #             util.manhattanDistance(food, toFood))
+
+    # return min(distancesToFood) + max(distancesBetweenFood)
 
 
 class ClosestDotSearchAgent(SearchAgent):
@@ -594,7 +595,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.breadthFirstSearch(problem)
 
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -631,7 +632,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x, y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return state in self.food.asList()
 
 
 def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pacman.GameState) -> int:
